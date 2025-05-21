@@ -1,29 +1,38 @@
-'use client'
+"use client";
 
-import { LocaleIcon,DarkIcon } from "@/components/icons"
-import { ThemeToggle } from "../ui/ThemeToggle"
+import { LocaleIcon, DarkIcon, LightIcon, UserIcon } from "@/components/icons";
+import { ThemeToggle } from "../ui/ThemeToggle";
+import { usePreferences } from "@/hooks/usePreferences";
+
+const buttonStyle = "w-8 h-8 flex justify-center items-center"
 
 export const Header = () => {
-  return (
-    <header className="h-10 bg-black">
-      {/* 左: タイトル */}
-      <div className="text-lg font-semibold tracking-wide">
-        Netfleece Web
-      </div>
+	const { theme, toggleTheme } = usePreferences();
+	return (
+		<header className="h-10 bg-red-400 flex justify-between px-4">
+			{/* 左: タイトル */}
+			<p className="flex items-center text-lg font-semibold tracking-wide text-white">Netfleece Web</p>
 
-      {/* 右: 操作メニュー */}
-      <div className="flex items-center gap-3">
-        <LocaleIcon className="size-1"/>
-        <ThemeToggle />
+			{/* 右: 操作メニュー */}
+			<div className="flex items-center gap-3">
+				{/* 言語切り替えボタン */}
+				<div className={buttonStyle}>
+					<LocaleIcon className="size-5 text-white" />
+				</div>
 
-        {/* ユーザーアイコン */}
-        <button
-          className="w-8 h-8 rounded-full bg-white/30 text-white flex items-center justify-center"
-          aria-label="User menu"
-        >
-          👤
-        </button>
-      </div>
-    </header>
-  )
-}
+				{/* テーマ切り替えボタン */}
+				<div onClick={toggleTheme} className={buttonStyle}>
+					{theme == "light" 
+          ? <LightIcon className="size-5 text-white"/> 
+          : <DarkIcon className="size-5 text-white"/>}
+				</div>
+				{/* <ThemeToggle /> */}
+
+				{/* ユーザーアイコン */}
+				<div className={buttonStyle}>
+					<UserIcon className=" size-8 text-white" />
+				</div>
+			</div>
+		</header>
+	);
+};

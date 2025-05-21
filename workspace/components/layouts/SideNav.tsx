@@ -1,77 +1,69 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { navItems } from '@/utils/nav'
-import { NavItem as NavItemComponent } from '@/components/ui/NavItem'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { NavItem } from '@/components/ui/NavItem'
 import { cva } from 'class-variance-authority'
-import { clsx } from 'clsx'
 
-// ✅ SideNav コンテナのクラス定義
 const sideNavVariants = cva(
-  'relative flex flex-col h-full transition-all duration-300 ease-in-out bg-blue-600 text-white',
+  'relative shrink-0 transition-all duration-300 flex',
   {
     variants: {
-      collapsed: {
-        true: 'w-16',
-        false: 'w-64',
+      open: {
+        true: 'w-60',  // 240px
+        false: 'w-15', // 60px
       },
     },
     defaultVariants: {
-      collapsed: false,
+      open: true,
     },
   }
 )
 
-// ✅ トグルボタンのアイコン選択
-const ToggleIcon = ({ collapsed }: { collapsed: boolean }) => {
-  return collapsed ? (
-    <ChevronRightIcon className="w-4 h-4 text-white" />
-  ) : (
-    <ChevronLeftIcon className="w-4 h-4 text-white" />
-  )
-}
+const toggleBarVariants = cva(
+  'transition-all duration-300 flex items-center justify-center cursor-pointer select-none',
+  {
+    variants: {
+      open: {
+        true: 'bg-gray-200',
+        false: 'bg-gray-100',
+      },
+    },
+    defaultVariants: {
+      open: true,
+    },
+  }
+)
 
-export const SideNav = () => {
-  const [collapsed, setCollapsed] = useState(false)
-  const [hovering, setHovering] = useState(false)
-
-  const toggle = () => setCollapsed((prev) => !prev)
-
-  const handleMouseEnter = () => setHovering(true)
-  const handleMouseLeave = () => setHovering(false)
-
-  const shouldShowToggle = hovering
+export default function SideNav() {
+  const pathname = usePathname()
+  const [open, setOpen] = useState(true)
 
   return (
-    <aside
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className={sideNavVariants({ collapsed })}
-    >
-      <nav className="flex-1 mt-4 space-y-1">
-        {navItems.map((item) => {
-          const Icon = item.icon
-          return (
-            <NavItemComponent
-              key={item.href}
-              href={item.href}
-              label={item.label}
-              icon={<Icon className="w-5 h-5" />}
-              collapsed={collapsed}
-            />
-          )
-        })}
+    <aside className={sideNavVariants({ open })}>
+      {/* ▼ ナビ本体 */}
+      <nav className="flex flex-col bg-black text-white w-full pt-8 space-y-2">
+        {navItems.map((item) => (
+          <NavItem
+            key={item.href}
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            collapsed={!open}
+          />
+        ))}
       </nav>
 
-      {shouldShowToggle && (
-        <button
-          onClick={toggle}
-          className="absolute -right-3 top-4 z-10 p-1 rounded-full bg-blue-400 border border-white shadow"
-        >
-          <ToggleIcon collapsed={collapsed} />
-        </button>
-      )}
+      {/* ▼ 開閉バー */}
+      <div
+        onClick={() => setOpen(!open)}
+        className={toggleBarVariants({ open })}
+      >
+        <span className="text-black text-sm font-bold pointer-events-none">
+          {open ? '«' : '»'}
+        </span>
+      </div>
     </aside>
   )
 }

@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 import { Header } from '@/components/layouts/Header'
-import { SideNav } from '@/components/layouts/SideNav'
+import { SideNav}
 
 interface AppShellProps {
   children: ReactNode
@@ -18,7 +18,7 @@ export const AppShell = ({ children }: AppShellProps) => {
       <div className="flex flex-1 overflow-hidden">
         <SideNav />
 
-        <main className="flex-1 overflow-y-auto p-4 bg-background text-foreground">
+        <main className="bg-black w-full">
           {children}
         </main>
       </div>
