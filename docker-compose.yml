@@ -1,0 +1,29 @@
+services:
+  nf:
+    image: ubuntu:latest
+    container_name: netfleece_web
+    working_dir: /workspace
+    volumes:
+      - ./workspace:/workspace:cached
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/mydb
+    depends_on:
+      - db
+    command: sleep infinity
+  
+  db:
+    image: postgres:16
+    container_name: netfleece_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=mydb
+
+volumes:
+  db-data:

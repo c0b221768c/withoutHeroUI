@@ -1,0 +1,7 @@
+{
+	"name": "NetFleeceWeb",
+	"dockerComposeFile": "../docker-compose.yml",
+	"service": "nf",
+	"workspaceFolder": "/workspace",
+	"remoteUser": "root"
+}

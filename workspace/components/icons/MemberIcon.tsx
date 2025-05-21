@@ -1,0 +1,6 @@
+import { UserGroupIcon as Member } from "@heroicons/react/24/outline";
+import { SvgProps } from "./types";
+
+export function MemberIcon({ ...rest }: SvgProps) {
+	return <Member {...rest} />;
+}
